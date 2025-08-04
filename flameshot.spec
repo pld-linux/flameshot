@@ -4,26 +4,35 @@
 Summary:	Powerful, yet simple to use open-source screenshot software
 Summary(pl.UTF-8):	Potężne, ale proste w użyciu otwartoźródłowe oprogramowanie do zrzutów ekranu
 Name:		flameshot
-Version:	12.1.0
+Version:	13.0.0
 Release:	1
 License:	GPLv3+ and ASL 2.0 and GPLv2 and LGPLv3 and Free Art
 Group:		Applications/Graphics
 URL:		https://github.com/flameshot-org/flameshot
 Source0:	https://github.com/flameshot-org/flameshot/archive/v%{version}.tar.gz
-# Source0-md5:	8c24308d01e3c073f9e876785b623211
-BuildRequires:	Qt5Core-devel >= 5
-BuildRequires:	Qt5DBus-devel >= 5
-BuildRequires:	Qt5Gui-devel >= 5
-BuildRequires:	Qt5Network-devel >= 5
-BuildRequires:	Qt5Svg-devel
-BuildRequires:	Qt5Widgets-devel >= 5
+# Source0-md5:	ad6e6c313999120ca9a7212b925809c8
+BuildRequires:	Mesa-libGLU-devel
+BuildRequires:	Qt6Core-devel
+BuildRequires:	Qt6DBus-devel
+BuildRequires:	Qt6Designer-devel
+BuildRequires:	Qt6Gui-devel
+BuildRequires:	Qt6Network-devel
+BuildRequires:	Qt6OpenGL-devel
+BuildRequires:	Qt6Svg-devel
+BuildRequires:	Qt6UiTools-devel
+BuildRequires:	Qt6Widgets-devel
+BuildRequires:	Qt6Xml-devel
+BuildRequires:	Vulkan-Loader-devel
 BuildRequires:	cmake
 BuildRequires:	desktop-file-utils
 BuildRequires:	hicolor-icon-theme
-BuildRequires:	kf5-kguiaddons-devel >= 5.89.0
+BuildRequires:	libglvnd-libEGL-devel
+BuildRequires:	libglvnd-libGL-devel
+BuildRequires:	libglvnd-libGLES-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	qt5-linguist
+BuildRequires:	qt6-linguist
+BuildRequires:	xorg-lib-libxkbcommon-devel
 Suggests:	bash-completion-%{name}
 Suggests:	fish-completion-%{name}
 Suggests:	zsh-completion-%{name}
@@ -104,6 +113,13 @@ cd build
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/QtColorWidgets
+%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/kdsingleapplication-qt6
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/cmake
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libQtColorWidgets.so
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libkdsingleapplication-qt6.a
+%{__rm} $RPM_BUILD_ROOT%{_pkgconfigdir}/QtColorWidgets.pc
+
 cd ..
 %find_lang Internationalization --with-qm
 
@@ -129,6 +145,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/*.svg
 %{_datadir}/metainfo/org.flameshot.Flameshot.metainfo.xml
 %{_mandir}/man1/%{name}.1*
+%attr(755,root,root)	%{_libdir}/libQtColorWidgets.so.2
+%attr(755,root,root)	%{_libdir}/libQtColorWidgets.so.2.2.0
 
 %files -n bash-completion-flameshot
 %defattr(644,root,root,755)
