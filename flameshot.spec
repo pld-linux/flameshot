@@ -5,12 +5,14 @@ Summary:	Powerful, yet simple to use open-source screenshot software
 Summary(pl.UTF-8):	Potężne, ale proste w użyciu otwartoźródłowe oprogramowanie do zrzutów ekranu
 Name:		flameshot
 Version:	13.1.0
-Release:	0.1
+Release:	0.2
 License:	GPLv3+ and ASL 2.0 and GPLv2 and LGPLv3 and Free Art
 Group:		Applications/Graphics
 URL:		https://github.com/flameshot-org/flameshot
 Source0:	https://github.com/flameshot-org/flameshot/archive/v%{version}.tar.gz
 # Source0-md5:	30e92c3b6c5da6fa9916b242c805e1eb
+Source1:	https://gitlab.com/mattbas/Qt-Color-Widgets/-/archive/3.0.0/Qt-Color-Widgets-3.0.0.tar.gz
+# Source1-md5:	ff5bb2c1966edbe7e6571c9af4612820
 BuildRequires:	Mesa-libGLU-devel
 BuildRequires:	Qt6Core-devel
 BuildRequires:	Qt6DBus-devel
@@ -26,6 +28,7 @@ BuildRequires:	Vulkan-Loader-devel
 BuildRequires:	cmake
 BuildRequires:	desktop-file-utils
 BuildRequires:	hicolor-icon-theme
+BuildRequires:	kf6-kguiaddons-devel
 BuildRequires:	libglvnd-libEGL-devel
 BuildRequires:	libglvnd-libGL-devel
 BuildRequires:	libglvnd-libGLES-devel
@@ -96,13 +99,20 @@ Fish command line completion support for %{name}.
 Uzupełnianie parametrów polecenia flameshot dla powłoki FISH.
 
 %prep
-%setup -q
+%setup -q -a1
+
+# Move dependency to external folder
+mkdir external
+mv Qt-Color-Widgets-3.0.0 external/Qt-Color-Widgets
 
 %build
 mkdir -p build
 cd build
 %cmake .. \
 	-DUSE_WAYLAND_CLIPBOARD:BOOL=ON \
+	-DBUILD_SHARED_LIBS:BOOL=OFF \
+	-DDISABLE_UPDATE_CHECKER:BOOL=ON \
+	-DUSE_KDSINGLEAPPLICATION=OFF \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 %{__make}
@@ -112,13 +122,6 @@ rm -rf $RPM_BUILD_ROOT
 cd build
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
-
-%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/QtColorWidgets
-%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/kdsingleapplication-qt6
-%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/cmake
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libQtColorWidgets.so
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libkdsingleapplication-qt6.a
-%{__rm} $RPM_BUILD_ROOT%{_pkgconfigdir}/QtColorWidgets.pc
 
 cd ..
 %find_lang Internationalization --with-qm
@@ -145,8 +148,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/*.svg
 %{_datadir}/metainfo/org.flameshot.Flameshot.metainfo.xml
 %{_mandir}/man1/%{name}.1*
-%attr(755,root,root)	%{_libdir}/libQtColorWidgets.so.2
-%attr(755,root,root)	%{_libdir}/libQtColorWidgets.so.2.2.0
 
 %files -n bash-completion-flameshot
 %defattr(644,root,root,755)
