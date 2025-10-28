@@ -4,13 +4,13 @@
 Summary:	Powerful, yet simple to use open-source screenshot software
 Summary(pl.UTF-8):	Potężne, ale proste w użyciu otwartoźródłowe oprogramowanie do zrzutów ekranu
 Name:		flameshot
-Version:	13.1.0
+Version:	13.2.0
 Release:	1
 License:	GPLv3+ and ASL 2.0 and GPLv2 and LGPLv3 and Free Art
 Group:		Applications/Graphics
 URL:		https://github.com/flameshot-org/flameshot
-Source0:	https://github.com/flameshot-org/flameshot/archive/v%{version}.tar.gz
-# Source0-md5:	30e92c3b6c5da6fa9916b242c805e1eb
+Source0:	https://github.com/flameshot-org/flameshot/archive/refs/tags/v%{version}.tar.gz
+# Source0-md5:	66a62fcf1205186000b36ec2485325af
 Source1:	https://gitlab.com/mattbas/Qt-Color-Widgets/-/archive/3.0.0/Qt-Color-Widgets-3.0.0.tar.gz
 # Source1-md5:	ff5bb2c1966edbe7e6571c9af4612820
 BuildRequires:	Mesa-libGLU-devel
